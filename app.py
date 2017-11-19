@@ -2,7 +2,7 @@ import os
 import sqlite3
 from flask import Flask, request, session, g, redirect, url_for, abort, \
      render_template, flash
-
+import csv
 app = Flask(__name__)
 app.config.from_object(__name__)
 
@@ -47,13 +47,34 @@ def initdb_command():
     init_db()
     print('Initialized the database.')
 
+@app.cli.command('ucsv')
+def updatecsv_command():
+    con = sqlite3.connect(app.config['DATABASE'])
+    stats = csv.reader(open("speedtest.csv"))
+    con.execute('delete from entries')
+    con.executemany("insert into entries (date,country,region,city,latitude,longitude,ispName,ispNameRaw,download,upload,latency,testId) values (?,?,?,?,?,?,?,?,?,?,?,?)",((rec[0],rec[2],rec[3],rec[4],rec[5],rec[6],rec[12],rec[13],rec[15],rec[16],rec[17],rec[19]) for rec in stats))
+    con.commit()
+    print('Updated The Table Entries')
+
 
 @app.route('/')
 def home():
     return render_template('home.html')
 
-@app.route('/search/')
+@app.route('/search/',methods=["GET"])
 def search():
+    query = request.args.get('query', '')
+    if query:
+         print ("q = ",query)
+         db = get_db()
+         cur = db.execute('select ispName,avg(download) as download,avg(upload) as upload,avg(latency) as latency,count(*) as tests from entries where region = ? or city = ? group by ispName',[query,query])
+         entries = cur.fetchall()
+         found = False
+         if len(entries)>0:
+             found = True
+         else:
+             found = False
+         return render_template('locationsearch.html',found=found,entries=entries,loc=query,search=True)
     return render_template('locationsearch.html')
 
 @app.route('/result')

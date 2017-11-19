@@ -42,74 +42,50 @@
 
       <div class ="container" style="margin:20px">
 
-        <form>
+        <form method="get" action="/search/">
           <div class="input-group">
-            <input type="text" class="form-control">
+            <input type="text" class="form-control" name="query">
             <span class="input-group-btn">
                   <button class="btn btn-outline-success " type="submit">Go!</button>
             </span>
           </div>
         </form>
 
+        {% if not found and search %}
+        <div class="card border-danger" style="margin-top:20px">
+            <div class="card-body" >
+               <ul>
+                 <li> No internet speed tests have been performed in {{loc}} as of yet.
+                 <li> Help us serve you better by spreading the word about this website and bringing more speedtests in.
+              </ul>
+            </div>
+       </div>
+       {% endif %}
+
+        {% if found and entries %}
         <div class="card border-success" style="margin-top:20px">
             <div class="card-body" >
-                Showing results for Gurgaon,Haryana,India
+                Showing results for {{loc}}
             </div>
        </div>
 
-       <!-- <div class="card border-danger" style="margin-top:20px">
-           <div class="card-body" >
-              <ul>
-                <li> No internet speed tests have been performed in New Delhi,India as of yet.
-                <li> Help us serve you better by spreading the word about this website and bringing more speedtests in.
-             </ul>
-           </div>
-      </div> -->
-
+       {% for i in entries %}
         <div class="card" style="margin-top:20px;">
             <div class="card-body">
-              <h4 class="card-title">Airtel</h4>
-              <h6 class="card-subtitle mb-2 text-muted">Mobile Network </h6>
-              <p class="card-text"> Here are the details gathered from 22 tests conducted over a timeperiod of 4 days. </p>
+              <h4 class="card-title">{{i['ispName']}}</h4>
+              <p class="card-text"> Here are the details gathered from {{i['tests']}} tests  </p>
 
               <ul>
-              <li>Average Internet Download Speed : 3.4 MBPS </li>
-              <li>Average Internet Upload Speed : 2.4 MBPS </li>
-              <li>Avergae Latency : 40ms </li>
+              <li>Average Internet Download Speed : {{i['download']}} Kbps </li>
+              <li>Average Internet Upload Speed : {{i['upload']}} Kbps </li>
+              <li>Avergae Latency : {{i['latency']}} ms </li>
               </ul>
-              <a href="#" class="card-link">All results of Airtel : Mobile Network </a>
+              <a href="result/" class="card-link">All detailed results of {{i['ispName']}} </a>
             </div>
         </div>
+        {% endfor %}
+        {% endif %}
 
-        <div class="card" style="margin-top:20px;">
-            <div class="card-body">
-              <h4 class="card-title">Jio </h4>
-              <h6 class="card-subtitle mb-2 text-muted">Mobile Network </h6>
-              <p class="card-text"> Here are the details gathered from 43 tests conducted over a timeperiod of 6 days. </p>
-
-              <ul>
-              <li>Average Internet Download Speed : 2.9 MBPS </li>
-              <li>Average Internet Upload Speed : 1.7 MBPS </li>
-              <li>Avergae Latency : 70ms </li>
-              </ul>
-              <a href="#" class="card-link">All results of Jio : Mobile Network </a>
-            </div>
-        </div>
-
-        <div class="card" style="margin-top:20px;">
-            <div class="card-body">
-              <h4 class="card-title">ACT BroadBand </h4>
-              <h6 class="card-subtitle mb-2 text-muted">Wireline Network </h6>
-              <p class="card-text"> Here are the details gathered from 43 tests conducted over a timeperiod of 6 days. </p>
-
-              <ul>
-              <li>Average Internet Download Speed : 12.9 MBPS </li>
-              <li>Average Internet Upload Speed : 11.7 MBPS </li>
-              <li>Avergae Latency : 5ms </li>
-              </ul>
-              <a href="#" class="card-link">All results of ACT : Wireline Network </a>
-            </div>
-        </div>
 
 
 </div>
