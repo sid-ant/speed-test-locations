@@ -35,9 +35,7 @@
         </div>
     </nav>
 
-    {% if not search %}
-    Redirect
-    {% endif %}
+
     {% if search and found %}
     <div class="container" style="margin-top:40px">
       <h2> {{isp}} at {{loc}} </h2>
@@ -45,14 +43,7 @@
 
       <div class ="container" style="margin:20px">
 
-       <!-- <div class="card border-danger" style="margin-top:20px">
-           <div class="card-body" >
-              <ul>
-                <li> No internet speed tests have been performed in New Delhi,India as of yet.
-                <li> Help us serve you better by spreading the word about this website and bringing more speedtests in.
-             </ul>
-           </div>
-      </div> -->
+
 
         {% for i in results %}
         <div class="card border-info" style="margin-top:20px;">

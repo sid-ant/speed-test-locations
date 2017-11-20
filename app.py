@@ -94,7 +94,7 @@ def result(location=None,ispname=None):
         else:
             found = False
         return render_template('results.html',found=found,results=results,loc=location,isp=ispname,search=True)
-    return render_template('results.html')
+    return redirect(url_for('home'))
 
 @app.route('/about')
 def about():
