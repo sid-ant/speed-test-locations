@@ -77,8 +77,23 @@ def search():
          return render_template('locationsearch.html',found=found,entries=entries,loc=query,search=True)
     return render_template('locationsearch.html')
 
-@app.route('/result')
-def result():
+@app.route('/result/')
+@app.route('/result/<location>/<ispname>/')
+def result(location=None,ispname=None):
+    if location and ispname:
+        print (location,ispname)
+        db = get_db()
+        cur = db.execute('select date,download,upload,latency,testId from entries where (ispName=? or ispNameRaw=?) and (region=? or city=?)',[ispname,ispname,location,location])
+        results = cur.fetchall()
+        found = False
+        if len(results)>0:
+            found = True
+            for i in results:
+                for k in i:
+                    print (k)
+        else:
+            found = False
+        return render_template('results.html',found=found,results=results,loc=location,isp=ispname,search=True)
     return render_template('results.html')
 
 @app.route('/about')
