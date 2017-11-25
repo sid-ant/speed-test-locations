@@ -2,6 +2,7 @@ import os
 import sqlite3
 from flask import Flask, request, session, g, redirect, url_for, abort, \
      render_template, flash
+from werkzeug.contrib.fixers import ProxyFix
 import csv
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -99,3 +100,11 @@ def result(location=None,ispname=None):
 @app.route('/about')
 def about():
     return render_template('about.html')
+
+
+app.wsgi_app = ProxyFix(app.wsgi_app)
+
+ if __name__ == '__main__':
+     app.debug = True
+     port = int(os.environ.get("PORT", 5000))
+     app.run(host='0.0.0.0', port=port)
