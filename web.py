@@ -101,5 +101,9 @@ def result(location=None,ispname=None):
 def about():
     return render_template('about.html')
 
+@app.route('/siddhantmusttest')
+def test():
+    return 'Test 101'
+
 
 app.wsgi_app = ProxyFix(app.wsgi_app)
