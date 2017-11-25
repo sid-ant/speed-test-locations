@@ -60,7 +60,6 @@ def updatecsv_command():
 
 @app.route('/')
 def home():
-    print "hello world"
     return render_template('home.html')
 
 @app.route('/search/',methods=["GET"])
