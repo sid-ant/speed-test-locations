@@ -4,6 +4,8 @@ from flask import Flask, request, session, g, redirect, url_for, abort, \
      render_template, flash
 from werkzeug.contrib.fixers import ProxyFix
 import csv
+import urllib.request
+
 app = Flask(__name__)
 app.config.from_object(__name__)
 
@@ -57,6 +59,25 @@ def updatecsv_command():
     con.commit()
     print('Updated The Table Entries')
 
+def updatecsv():
+    con = sqlite3.connect(app.config['DATABASE'])
+    stats = csv.reader(open("speedtest.csv"))
+    con.execute('delete from entries')
+    con.executemany("insert into entries (date,country,region,city,latitude,longitude,ispName,ispNameRaw,download,upload,latency,testId) values (?,?,?,?,?,?,?,?,?,?,?,?)",((rec[0],rec[2],rec[3],rec[4],rec[5],rec[6],rec[12],rec[13],rec[15],rec[16],rec[17],rec[19]) for rec in stats))
+    con.commit()
+    print('Updated The Table Entries')
+
+@app.cli.command('udwl')
+def download_csv():
+    url = "https://account.speedtestcustom.com/api/test/24578/export/latest?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Ik1qaEVSVFF4TkRVeU5qTXhRVE0zUWtJeFJETkNRVVk1UlRaQ016VkJNemhHT1RNMU5rUkNRUSJ9.eyJpc3MiOiJodHRwczovL29va2xhLmF1dGgwLmNvbS8iLCJzdWIiOiJhdXRoMHw1OWIyZWQxN2QxYTI1YzZiODA4MThjYmIiLCJhdWQiOlsiaHR0cHM6Ly9hcGkuc3QtY29ubmVjdC5jb20iLCJodHRwczovL29va2xhLmF1dGgwLmNvbS91c2VyaW5mbyJdLCJpYXQiOjE1MTI0MDk3MTgsImV4cCI6MTUxMjQ5NjExOCwiYXpwIjoielVnRHhzc2lHdXc2WGxjUHFFemxlS1RBOFE5Z2dfMzkiLCJzY29wZSI6Im9wZW5pZCBwcm9maWxlIGVtYWlsIGFkZHJlc3MgcGhvbmUiLCJndHkiOiJwYXNzd29yZCJ9.TxSRfA9k_86TBpTOpU7GLspc_GqvUNMCSejv1u8HSIaQRFtukqlQxCTOZdP2D1tjuillmyjDpWPCK4jc-fKsDeNLwniFiU8UajgwqOBSPDpMZ40NQcOB7ZbgKCKJrNSuxcjpirGSiiBlPnRjeAEHHeoZE0RT5YR02q_RlzJQcE3rHlh39drb96KOrcMfNUXx6Lk5SRf3LruiNN7mSkBEM7ivUf6-9IWCpMXjI6Yk0tK03Xx_geYFFMo16f_tORUC1laIkTiWvOtNBCGH9jJ2QzlJe5J8tIZD9JA_hCz4-s0NBxWKQHfeyjchbPRZ2nGNGgywB2fTZLg1YClgMgiang"
+
+    file_name="speedtest.csv"
+    with urllib.request.urlopen(url) as response, open(file_name, 'wb') as out_file:
+        data = response.read() # a `bytes` object
+        out_file.write(data)
+
+    print('Downloaded The CSV File')
+    updatecsv()
 
 @app.route('/')
 def home():
