@@ -48,8 +48,7 @@
         {% for i in results %}
         <div class="card border-info" style="margin-top:20px;">
             <div class="card-body">
-              <h4 class="card-title">{{i['date']}}</h4>
-              <h6 class="card-subtitle mb-2 text-muted"> 5:07 PM </h6>
+              <h4 class="card-title">{{i['date']|truncate(10,False,'')}}</h4>
               <ul>
               <li> Internet Download Speed : {{i['download']}} Kbps </li>
               <li> Internet Upload Speed : {{i['upload']}} Kbps </li>
