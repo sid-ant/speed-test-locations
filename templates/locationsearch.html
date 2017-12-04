@@ -76,9 +76,9 @@
               <p class="card-text"> Here are the details gathered from {{i['tests']}} tests  </p>
 
               <ul>
-              <li>Average Internet Download Speed : {{i['download']}} Kbps </li>
-              <li>Average Internet Upload Speed : {{i['upload']}} Kbps </li>
-              <li>Avergae Latency : {{i['latency']}} ms </li>
+              <li>Average Internet Download Speed : {{i['download']|round }} Kbps </li>
+              <li>Average Internet Upload Speed : {{i['upload']|round }} Kbps </li>
+              <li>Avergae Latency : {{i['latency']|round }} ms </li>
               </ul>
               <a href="/result/{{loc}}/{{i['ispName']}}" class="card-link">All detailed results of {{i['ispName']}} </a>
             </div>
