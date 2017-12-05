@@ -89,7 +89,7 @@ def search():
     if query:
          print ("q = ",query)
          db = get_db()
-         cur = db.execute('select ispName,avg(download) as download,avg(upload) as upload,avg(latency) as latency,count(*) as tests from entries where region = ? or city = ? group by ispName',[query,query])
+         cur = db.execute('select ispName,avg(download) as download,avg(upload) as upload,avg(latency) as latency,count(*) as tests from entries where region = ? or city = ? COLLATE NOCASE group by ispName ',[query,query])
          entries = cur.fetchall()
          found = False
          if len(entries)>0:
